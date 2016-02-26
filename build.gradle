@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'muyinatech'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile 'org.apache.solr:solr-solrj:5.5.0'
+//    compile 'com.google.guava:guava:15.0'
+//    compile 'ch.qos.logback:logback-classic:1.1.3'
+//    compile 'ch.qos.logback:logback-core:1.1.3'
+//    compile 'org.slf4j:slf4j-api:1.7.12'
+//    compile 'org.mongodb:mongo-java-driver:3.2.1'
+//    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.1-1'
+//    testCompile 'org.hamcrest:hamcrest-all:1.3'
+//    testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'junit:junit:4.12'
+}
+
+// Add system properties when tests are executed
+test {
+    systemProperties 'property': 'value'
+}
+
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos' // publish to local directory called 'repos'
+       }
+    }
+}
