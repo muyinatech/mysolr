@@ -9,10 +9,12 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class SolrClientExample {
 
-    private static final String SOLR_URL = "http://localhost:8983/solr/goodsentries";
+    private static final String SOLR_URL = "http://localhost:8983/solr/books";
 
     public static void main(String[] args) {
         try (SolrClient solr = new HttpSolrClient(SOLR_URL)) {
@@ -22,19 +24,27 @@ public class SolrClientExample {
             // query.setHighlightRequireFieldMatch(true);
             query.setHighlightSimplePre("<em>");
             query.setHighlightSimplePost("</em>");
-            query.set("q", "compound"); //single phrase
-//            query.set("q", "gram module"); // multiple phrases
+            query.set("q", "percy"); //single phrase
+//            query.set("q", "Percy Jackson"); // multiple phrases
 //            query.set("q", "+fabric +module"); // match both phrases
-            query.set("hl.fl", "description");
-            query.set("start", 0);
-            query.set("facet", "true");
-            query.set("facet.field", "controlEntry");
-            query.set("mlt", "true");
-            query.set("mlt.fl", "description");
+            query.set("hl.fl", "series_t");
+//            query.set("start", 0);
+//            query.set("facet", "true");
+         //   query.set("facet.field", "controlEntry");
+//            query.set("mlt", "true");
+//            query.set("mlt.fl", "description");
             QueryResponse queryResponse = solr.query(query);
             SolrDocumentList results = queryResponse.getResults();
+            Map<String, Map<String, List<String>>> highlighting = queryResponse.getHighlighting();
+
             for (SolrDocument document : results){
-                System.out.println(document.get("description"));
+                System.out.println(document.get("name"));
+                String id = (String) document.get("id");
+                Map<String, List<String>> highlightMap = highlighting.get(id);
+                List<String> highlightValues = highlightMap.get("series_t");
+                for (String highlightValue : highlightValues) {
+                    System.out.println(highlightValue);
+                }
             }
 
         } catch (SolrServerException | IOException e) {
