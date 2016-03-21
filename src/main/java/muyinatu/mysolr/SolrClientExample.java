@@ -42,9 +42,7 @@ public class SolrClientExample {
                 String id = (String) document.get("id");
                 Map<String, List<String>> highlightMap = highlighting.get(id);
                 List<String> highlightValues = highlightMap.get("series_t");
-                for (String highlightValue : highlightValues) {
-                    System.out.println(highlightValue);
-                }
+                highlightValues.stream().forEach(System.out::println);
             }
 
         } catch (SolrServerException | IOException e) {
